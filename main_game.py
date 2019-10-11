@@ -2,6 +2,7 @@ import os
 import sys
 from lab import Maze
 
+
 def load_game():
     '''We load the txt map and we transform it on object Maze'''
     get_dir = os.path.dirname(os.path.abspath(__file__)) #Get the full path from where we execute the script
