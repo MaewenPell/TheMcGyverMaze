@@ -1,4 +1,5 @@
 import os
+import sys
 from lab import Maze
 
 def load_game():
@@ -10,7 +11,9 @@ def load_game():
     return maze
 
 def next_move(maze, current_position, maze_width):
-    user_move = input("Entrez votre next move currently (n/s/e/o) : ")
+    user_move = input("Entrez votre next move currently (n/s/e/o) -q : ")
+    if (user_move == "q"):
+        sys.exit(0)
     if (user_move == "n"):
             move_attempt = current_position - (maze_width + 1)
             if maze.is_crossable(maze.current_map[move_attempt]):
@@ -42,10 +45,12 @@ def next_move(maze, current_position, maze_width):
         print("Wrong you didn't enter a valid move")
     
 def map_processessing(current_map, current_position, move_attempt):
-    maze.current_map = list(maze.current_map)
+    ''' We swap two elem, the orignal place and the destination like [a],[b] = [b],[a]'''
+    maze.current_map = list(maze.current_map) #need to make a list in order to assign values
     maze.current_map[current_position], maze.current_map[move_attempt] = maze.current_map[move_attempt], maze.current_map[current_position]
-    maze.current_map = ''.join(maze.current_map)
-    maze.current_position = move_attempt
+    print(maze.current_map)
+    maze.current_map = ''.join(maze.current_map) #we join to have a good visual
+    maze.current_position = move_attempt #actualisation of the position after move
 
 if __name__ == "__main__":
     maze = load_game()
@@ -53,10 +58,9 @@ if __name__ == "__main__":
     while(maze.current_map[maze_width] != '\n'):
         maze_width += 1
     print(maze.current_map)
-    print("Before the moves : \n The current position is {}".format(
-        maze.current_position))
+    #print("Before the moves : \n The current position is {}".format(maze.current_position))
     while(maze.current_position != maze.iswin):
         next_move(maze, maze.current_position, maze_width)
-        print("The map is : \n ",maze.current_map)
-        print("After the moves : \n The current position is {}".format(
-            maze.current_position))
+        print("************* ACTUALISED MAP ***********")
+        print(maze.current_map)
+        #print("After the moves : \n The current position is {}".format(maze.current_position))
