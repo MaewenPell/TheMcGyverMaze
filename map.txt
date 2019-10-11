@@ -1,5 +1,5 @@
- OOOOOOOOOOOOOOO
-X O      O      O
+OOOOOOOOOOOOOOOOO
+& O      O      O
 O O   OO O OOOO O
 O OOO O  O    O O
 O O   O  OOOO O O
@@ -14,4 +14,4 @@ O  O      O O O O
 O  O OOOOOO O O O
 O  O O  OOO   O O
 O    O        O U
- OOOOOOOOOOOOOOO
+OOOOOOOOOOOOOOOOO
