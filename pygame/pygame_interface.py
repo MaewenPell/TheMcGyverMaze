@@ -1,10 +1,11 @@
 import pygame
 from classes import McGyver
 import os
+import numpy as np
 
-def game(win, game_display, x ,y):
+def game(win, game_display, x ,y) :
+
     ''' Main loop of the game :
-
     win : bool
     game_display : screen of the game
     x,y : int - position of McGyver
@@ -13,6 +14,7 @@ def game(win, game_display, x ,y):
     win : bool
     x,y : updated position of mcGyver
     '''
+
     x_change = 0
     y_change = 0
     white = (255,255,255)
@@ -42,8 +44,9 @@ def game(win, game_display, x ,y):
         return win, x,y
 
 
-def display_mc_gyver(x, y, game_display, mcGyver):
-    game_display.blit(mcGyver, (x, y))
+def display_mc_gyver(x, y, game_display, image_mcGyver):
+    game_display.blit(image_mcGyver, (x, y))
+
 
 def load_image(name, colorkey=None):
     fullname = os.path.join(os.getcwd(), 'ressource', name)
@@ -67,7 +70,7 @@ def main():
     pygame.init()
     game_display = pygame.display.set_mode((500, 500)) #The screen of the game
     pygame.display.set_caption('The Maze 2.0')
-    image, get_rect = load_image('MacGyver.png')
+    image_mc_gyver, get_rect = load_image('MacGyver.png')
     clock = pygame.time.Clock() #set a clock to define FPS
 
     ''' Setting initials variable '''
@@ -76,9 +79,12 @@ def main():
     y = 0
     win = False
 
+    # Get the full path from where we execute the script
+    get_dir = os.path.dirname(os.path.abspath(__file__))
+
     while not win :
         win,x,y = game(win, game_display, x, y) 
-        display_mc_gyver(x,y, game_display, image)
+        display_mc_gyver(x,y, game_display, image_mc_gyver)
         pygame.display.update()
         clock.tick(60)
     pygame.quit()
