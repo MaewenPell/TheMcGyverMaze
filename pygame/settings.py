@@ -24,3 +24,10 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 
 PLAYER_SPEED = 150
 PLAYER_IMG = 'MacGyver.png'
+BOSS_IMG = 'Gardien.png'
+
+
+
+''' ITEMS PROPERTIES '''
+
+ITEMS_IMAGES = {'seringue' : 'seringue.png', 'tube' : 'tube_plastique.png', 'ether' : 'ether.png' }

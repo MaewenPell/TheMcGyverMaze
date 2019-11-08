@@ -4,6 +4,7 @@ from settings import *
 from sprites import *
 from os import path
 from tilemap import *
+from random import randint
 import pytmx
 
 
@@ -20,28 +21,60 @@ class Game:
         game_folder = path.dirname(__file__)
         image_folder = path.join(game_folder, 'ressource')
         map_folder = path.join(game_folder, 'maps')
-        #self.map = Map(path.join(game_folder, 'map2.txt'))
+        #self.map = Map(path.join(game_folder, 'map2.txt')) #Old map
         self.map = TiledMap(path.join(map_folder, 'map_1.tmx'))
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
         self.player_img = pg.image.load(path.join(image_folder, PLAYER_IMG)).convert_alpha()
+        self.boss_img = pg.image.load(path.join(image_folder, BOSS_IMG)).convert_alpha()
+        self.item_images = {}
+        for item in ITEMS_IMAGES :
+            self.item_images[item] = pg.image.load(path.join(image_folder, ITEMS_IMAGES[item])).convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
+        self.items = pg.sprite.Group()
+        #     OLD way to load map
         # for row,tiles in enumerate(self.map.data):
         #     for col, tile in enumerate(tiles):
         #         if tile == 'O':
         #             Wall(self,col, row)
         #         if tile == '&':
         #             self.player = Player(self, col, row)
-        self.player = Player(self, 5 , 5)
+        object_possible_location = []
+        for tile_object in self.map.tmxdata.objects:
+            if tile_object.name == 'player':
+                self.player = Player(self, tile_object.x, tile_object.y)
+            if tile_object.name == 'wall':
+                self.wall = Obstacle(self, tile_object.x,
+                                     tile_object.y, tile_object.width, tile_object.height)
+            if tile_object.name == 'boss':
+                self.boss = Boss(self, tile_object.x,
+                                 tile_object.y, tile_object.width, tile_object.height)
+            if tile_object.name == 'object':
+                object_possible_location.append((tile_object.x, tile_object.y))
+    
+        ''' Object managing '''
+        index = randint(0, len(object_possible_location) - 1)
+        self.items1 = Item(self, object_possible_location[index][0], object_possible_location[index][1], 'tube')
+        object_possible_location.pop(index)
+        index = randint(0, len(object_possible_location) - 1)
+
+        self.items2 = Item(self, object_possible_location[index][0], object_possible_location[index][1], 'ether')
+        object_possible_location.pop(index)
+        index = randint(0, len(object_possible_location) - 1)
+
+        self.items3 = Item(
+            self, object_possible_location[index][0], object_possible_location[index][1], 'seringue')
+        object_possible_location.pop(index)
+
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
         while self.playing:
-            self.dt = self.clock.tick(FPS) / 1000 #We make this to move at constant speed and not base on the framerate
+            self.dt = self.clock.tick(FPS) / 1000 #We make this to move at constant speed not base on the framerate
             self.events()
             self.update()
             self.draw()
@@ -52,7 +85,17 @@ class Game:
 
     def update(self):
         # update portion of the game loop
+        # player walk on a item 
         self.all_sprites.update()
+        hits = pg.sprite.spritecollide(self.player, self.items, True)
+        for hit in hits :
+            self.player.invetory.append(hit)
+        
+        hits_boss = pg.sprite.collide_rect(self.player, self.boss)
+        if len(self.player.invetory) == 3 :
+            hits_boss.kill()
+        #else :
+            #self.quit()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
