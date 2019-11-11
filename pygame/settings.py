@@ -10,8 +10,8 @@ YELLOW = (255, 255, 0)
 
 ''' Game settings '''
 
-WIDTH = 300   # 16 * 64 or 32 * 32 or 64 * 16
-HEIGHT = 300  # 16 * 48 or 32 * 24 or 64 * 12
+WIDTH = 300  # 20 px tiles * 15 tiles
+HEIGHT = 300  
 FPS = 60
 TITLE = "The McGyver Maze"
 BGCOLOR = DARKGREY
