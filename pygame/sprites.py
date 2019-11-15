@@ -16,7 +16,7 @@ class Player(pg.sprite.Sprite):
         self.vx, self.vy = 0, 0
         self.x = x
         self.y = y
-        self.invetory = []
+        self.inventory = []
 
     def get_keys(self):
         ''' Handle the keys moves '''
@@ -38,13 +38,21 @@ class Player(pg.sprite.Sprite):
         ''' We check in the list of walls, if will walk on an existing (x,y) wall location'''
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
-            if hits : 
+            if hits: 
                 if self.vx > 0 : 
                     self.x = hits[0].rect.left - self.rect.width #We minus the width because we consider rect.left side 
                 if self.vx < 0 :
                     self.x = hits[0].rect.right 
                 self.vx = 0
                 self.rect.x = self.x
+            elif self.x < 0 :
+                self.vx = 0
+                self.rect.x = 0
+            elif self.x >= WIDTH - self.rect.width:
+                self.vx = 0
+                self.x = WIDTH - self.rect.width
+                self.rect.x = self.x
+    
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
@@ -53,6 +61,13 @@ class Player(pg.sprite.Sprite):
                 if self.vy < 0:
                     self.y = hits[0].rect.bottom
                 self.vy = 0
+                self.rect.y = self.y
+            elif self.y < 0 :
+                self.vy = 0
+                self.rect.y = 0
+            elif self.y >= HEIGHT - self.rect.width:
+                self.vy = 0
+                self.y = HEIGHT - self.rect.width
                 self.rect.y = self.y
 
     def update(self):
@@ -63,9 +78,6 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
-
-    def picked_item(self, item):
-        self.inventory.append(item)
 
 class Item(pg.sprite.Sprite):
     ''' Class who handle all the items we can pick inside the maze '''

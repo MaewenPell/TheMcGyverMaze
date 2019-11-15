@@ -25,8 +25,8 @@ class Game:
         image_folder = path.join(game_folder, 'ressource')
         map_folder = path.join(game_folder, 'maps')
 
+        self.font = path.join(image_folder, 'game_over.ttf')
         self.map = TiledMap(path.join(map_folder, 'map_1.tmx')) #We load the map we created with Tiled 
-
         self.map_img = self.map.make_map() #We define a Surface of width * height to countain the map
         self.map_rect = self.map_img.get_rect()
         self.player_img = pg.image.load(path.join(image_folder, PLAYER_IMG)).convert_alpha()
@@ -44,6 +44,8 @@ class Game:
         self.items = pg.sprite.Group()
 
         object_possible_location = []
+        self.end_game = False
+        self.end_game_win = False
 
         ''' Read all the tiles and if it's particular ones assign them to the related classes 
         '''
@@ -103,13 +105,15 @@ class Game:
         self.all_sprites.update()
         hits = pg.sprite.spritecollide(self.player, self.items, True) #If the player walk on an item we delete it from the maze and add it in the collected item
         for hit in hits : 
-            self.player.invetory.append(hit)
-
+            self.player.inventory.append(hit.type)
         if pg.sprite.collide_rect(self.player, self.boss) : #If we collide with the boss we check if we have all the three items, and so we kill the boss else we loose
-            if len(self.player.invetory) == 3 :
-                self.boss.kill() #TODO : write a message on the screen and make a quit statement
+            self.end_game = True
+            if len(self.player.inventory) == 3 :
+                self.boss.kill()
+                self.end_game_win = True
             else :
-                self.quit() #TODO : write a message on the screen to say we loose
+                self.end_game_win = False
+        
 
     # def draw_grid(self):
     #     for x in range(0, WIDTH, TILESIZE):
@@ -123,6 +127,15 @@ class Game:
         #self.draw_grid()
         self.screen.blit(self.map_img, self.map_rect)
         self.all_sprites.draw(self.screen)
+        a = len(self.player.inventory)
+        self.draw_text(str(len(self.player.inventory)), pg.font.get_default_font(), 20, GREEN, 20, 20, align='center')
+        self.draw_text('item(s)', pg.font.get_default_font(), 20, GREEN, WIDTH/4, 20, align='center')
+        if self.end_game == True :
+            if self.end_game_win == True :
+                self.draw_text("Congratulation ! You win", self.font, 50, GREEN, WIDTH / 2, HEIGHT / 2, align='center')
+            else :
+                self.draw_text("GAME OVER ! You loose", self.font, 50,
+                       RED, WIDTH / 2, HEIGHT / 2, align='center')
         pg.display.flip()
 
     def events(self):
@@ -133,6 +146,30 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.quit()
+
+    def draw_text(self, text, font_name, size, color, x, y, align='nw'):
+        font = pg.font.Font(font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        if align == "nw":
+            text_rect.topleft = (x, y)
+        if align ==  "ne":
+            text_rect.topright = (x, y)
+        if align == "sw":
+            text_rect.bottomleft = (x, y)
+        if align == "se":
+            text_rect.bottomright = (x, y)
+        if align == "n":
+            text_rect.midtop = (x, y)
+        if align == "s":
+            text_rect.midbottom = (x, y)
+        if align == "e":
+            text_rect.midright = (x, y)
+        if align == "w":
+            text_rect.midleft = (x, y)
+        if align == 'center':
+            text_rect.center = (x, y)
+        self.screen.blit(text_surface, text_rect)
 
 if __name__ == "__main__" :
     g = Game()
