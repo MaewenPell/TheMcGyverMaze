@@ -21,15 +21,14 @@ class Game:
     def load_data(self):
         ''' Definition of the images and the map '''
 
-        game_folder = path.dirname(__file__)
-        image_folder = path.join(game_folder, 'ressource')
-        map_folder = path.join(game_folder, 'maps')
+        self.game_folder = path.dirname(__file__)
+        self.image_folder = path.join(game_folder, 'ressource')
+        self.map_folder = path.join(game_folder, 'maps')
 
         self.font = path.join(image_folder, 'game_over.ttf')
-        self.map = TiledMap(path.join(map_folder, 'map_1.tmx')) #We load the map we created with Tiled 
-        self.map_img = self.map.make_map() #We define a Surface of width * height to countain the map
-        self.map_rect = self.map_img.get_rect()
+        
         self.player_img = pg.image.load(path.join(image_folder, PLAYER_IMG)).convert_alpha()
+        self.end_img = pg.image.load(path.join(image_folder, END_IMG)).convert_alpha()
         self.boss_img = pg.image.load(path.join(image_folder, BOSS_IMG)).convert_alpha()
         self.item_images = {}
         for item in ITEMS_IMAGES : #We load and assign images in a dict : {'game_name' : 'images_name.png'}
@@ -42,7 +41,11 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.items = pg.sprite.Group()
-
+        # We load the map we created with Tiled
+        self.map = TiledMap(path.join(self.map_folder, MAP)) #global
+        # We define a Surface of width * height to countain the map
+        self.map_img = self.map.make_map()
+        self.map_rect = self.map_img.get_rect()
         object_possible_location = []
         self.end_game = False
         self.end_game_win = False
@@ -58,6 +61,8 @@ class Game:
             if tile_object.name == 'boss':
                 self.boss = Boss(self, tile_object.x,
                                  tile_object.y, tile_object.width, tile_object.height)
+            if tile_object.name == 'end':
+                self.end = End(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
             if tile_object.name == 'object':
                 object_possible_location.append((tile_object.x, tile_object.y))
 
@@ -107,13 +112,17 @@ class Game:
         for hit in hits : 
             self.player.inventory.append(hit.type)
         if pg.sprite.collide_rect(self.player, self.boss) : #If we collide with the boss we check if we have all the three items, and so we kill the boss else we loose
-            self.end_game = True
             if len(self.player.inventory) == 3 :
                 self.boss.kill()
-                self.end_game_win = True
             else :
+                self.end_game = True
                 self.end_game_win = False
-        
+                self.playing = False
+        if pg.sprite.collide_rect(self.player, self.end):
+            if len(self.player.inventory) == 3 :
+                self.end_game = True
+                self.end_game_win = True
+                self.playing = False
 
     # def draw_grid(self):
     #     for x in range(0, WIDTH, TILESIZE):
@@ -127,15 +136,7 @@ class Game:
         #self.draw_grid()
         self.screen.blit(self.map_img, self.map_rect)
         self.all_sprites.draw(self.screen)
-        a = len(self.player.inventory)
-        self.draw_text(str(len(self.player.inventory)), pg.font.get_default_font(), 20, GREEN, 20, 20, align='center')
-        self.draw_text('item(s)', pg.font.get_default_font(), 20, GREEN, WIDTH/4, 20, align='center')
-        if self.end_game == True :
-            if self.end_game_win == True :
-                self.draw_text("Congratulation ! You win", self.font, 50, GREEN, WIDTH / 2, HEIGHT / 2, align='center')
-            else :
-                self.draw_text("GAME OVER ! You loose", self.font, 50,
-                       RED, WIDTH / 2, HEIGHT / 2, align='center')
+        self.draw_text("Items picked : {}".format(len(self.player.inventory)), pg.font.get_default_font(), 20, GREEN, WIDTH/2, 20, align='center')
         pg.display.flip()
 
     def events(self):
@@ -170,9 +171,37 @@ class Game:
         if align == 'center':
             text_rect.center = (x, y)
         self.screen.blit(text_surface, text_rect)
+    
+    def show_game_over_screen(self):
+        self.screen.fill(BLACK)
+        if self.end_game_win == True:
+            self.draw_text("Congratulation ! You win", self.font,
+                            50, GREEN, WIDTH / 2, HEIGHT / 2, align='center')
+        else:
+            self.draw_text("GAME OVER ! You loose", self.font, 50,
+                            RED, WIDTH / 2, HEIGHT / 2, align='center')
+        self.draw_text("Press 'r' to restart or 'q' to quit", pg.font.get_default_font(), 15, WHITE, WIDTH / 2, HEIGHT * 3/4, align='center')
+        pg.display.flip()
+        self.wait_for_key()
+    
+    def wait_for_key(self):
+        pg.event.wait()
+        waiting = True
+        while waiting == True:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.quit()
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_r :
+                        waiting = False
+                    elif event.key == pg.K_q:
+                        self.quit()
+
 
 if __name__ == "__main__" :
     g = Game()
     while True:
         g.new()
         g.run()
+        g.show_game_over_screen()
