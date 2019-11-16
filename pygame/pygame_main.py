@@ -1,40 +1,45 @@
-import pygame as pg
 import sys
-from settings import *
-from sprites import *
 from os import path
-from tilemap import *
 from random import randint
-import pytmx
+
+import pygame as pg
+
+import settings as st
+import sprites as sprt
+import tilemap as tlm
 
 
 class Game:
     def __init__(self):
         ''' Initialize game data'''
         pg.init()
-        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption(TITLE)
+        self.screen = pg.display.set_mode((st.WIDTH, st.HEIGHT))
+        pg.display.set_caption(st.TITLE)
         self.clock = pg.time.Clock()
-        pg.key.set_repeat(500, 100) #key pressed > 500ms we repeat this key every 100ms
+        pg.key.set_repeat(500, 100)  # key pressed > 500ms repeat every 100ms
         self.load_data()
 
     def load_data(self):
         ''' Definition of the images and the map '''
 
         self.game_folder = path.dirname(__file__)
-        self.image_folder = path.join(game_folder, 'ressource')
-        self.map_folder = path.join(game_folder, 'maps')
-
-        self.font = path.join(image_folder, 'game_over.ttf')
-        
-        self.player_img = pg.image.load(path.join(image_folder, PLAYER_IMG)).convert_alpha()
-        self.end_img = pg.image.load(path.join(image_folder, END_IMG)).convert_alpha()
-        self.boss_img = pg.image.load(path.join(image_folder, BOSS_IMG)).convert_alpha()
+        self.image_folder = path.join(sprt.game_folder, 'ressource')
+        self.map_folder = path.join(sprt.game_folder, 'maps')
+        self.font = path.join(sprt.image_folder, 'game_over.ttf')
+        self.player_img = pg.image.load(
+            path.join(sprt.image_folder, st.PLAYER_IMG)).convert_alpha()
+        self.end_img = pg.image.load(
+            path.join(sprt.image_folder, st.END_IMG)).convert_alpha()
+        self.boss_img = pg.image.load(
+            path.join(sprt.image_folder, st.BOSS_IMG)).convert_alpha()
         self.item_images = {}
-        for item in ITEMS_IMAGES : #We load and assign images in a dict : {'game_name' : 'images_name.png'}
-            self.item_images[item] = pg.image.load(path.join(image_folder, ITEMS_IMAGES[item])).convert_alpha()
+        for item in st.ITEMS_IMAGES:
+            # We load and assign images {'game_name' : 'images_name.png'}
+            self.item_images[item] = pg.image.load(
+                path.join(sprt.image_folder,
+                          st.ITEMS_IMAGES[item])).convert_alpha()
 
-        #self.map = Map(path.join(game_folder, 'map2.txt')) #Old map
+        # self.map = Map(path.join(game_folder, 'map2.txt')) # Old map
 
     def new(self):
         ''' Scanning the tmx map and assign elems to Classes'''
@@ -42,46 +47,53 @@ class Game:
         self.walls = pg.sprite.Group()
         self.items = pg.sprite.Group()
         # We load the map we created with Tiled
-        self.map = TiledMap(path.join(self.map_folder, MAP)) #global
+        self.map = tlm.TiledMap(path.join(self.map_folder, st.MAP))
         # We define a Surface of width * height to countain the map
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
-        object_possible_location = []
+        self.obj_poss_loc = []
         self.end_game = False
         self.end_game_win = False
 
-        ''' Read all the tiles and if it's particular ones assign them to the related classes 
+        ''' Read all the tiles :
+            and assign them to the related class
         '''
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'player':
-                self.player = Player(self, tile_object.x, tile_object.y)
+                self.player = sprt.Player(self, tile_object.x, tile_object.y)
             if tile_object.name == 'wall':
-                self.wall = Obstacle(self, tile_object.x,
-                                     tile_object.y, tile_object.width, tile_object.height)
+                self.wall = sprt.Obstacle(self, tile_object.x,
+                                          tile_object.y, tile_object.width,
+                                          tile_object.height)
             if tile_object.name == 'boss':
-                self.boss = Boss(self, tile_object.x,
-                                 tile_object.y, tile_object.width, tile_object.height)
+                self.boss = sprt.Boss(self, tile_object.x,
+                                      tile_object.y, tile_object.width,
+                                      tile_object.height)
             if tile_object.name == 'end':
-                self.end = End(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
+                self.end = sprt.End(self, tile_object.x,
+                                    tile_object.y, tile_object.width,
+                                    tile_object.height)
             if tile_object.name == 'object':
-                object_possible_location.append((tile_object.x, tile_object.y))
+                self.obj_poss_loc.append(
+                    (tile_object.x, tile_object.y))
 
-        ''' Object managing : 
-        1- We generate a random index between 0 and the number of possible location
-        2- For each item we create an instance of Item and place it in the maze at the place defined randomly
-        3- We delete this location so we can't have two items at the same location
+        self.place_objects('tube')
+        self.place_objects('ether')
+        self.place_objects('seringue')
+
+    def place_objects(self, type):
         '''
-        index = randint(0, len(object_possible_location) - 1)
-        self.items1 = Item(self, object_possible_location[index][0], object_possible_location[index][1], 'tube')
-        object_possible_location.pop(index)
+        Object managing :
+        1- We generate a random index between 0 and the len of possible loc
+        2- For each item we create an instance of Item
+           and place it in the maze at the place defined randomly
+        3- We delete this location so we can't have two items at the same place
+        '''
 
-        index = randint(0, len(object_possible_location) - 1)
-        self.items2 = Item(self, object_possible_location[index][0], object_possible_location[index][1], 'ether')
-        object_possible_location.pop(index)
-
-        index = randint(0, len(object_possible_location) - 1)
-        self.items3 = Item(self, object_possible_location[index][0], object_possible_location[index][1], 'seringue')
-        object_possible_location.pop(index)
+        index = randint(0, len(self.obj_poss_loc) - 1)
+        sprt.Item(self, self.obj_poss_loc[index][0],
+                  self.obj_poss_loc[index][1],
+                  type)
 
         #     OLD way to load map
         # for row,tiles in enumerate(self.map.data):
@@ -95,31 +107,37 @@ class Game:
         ''' Main loop of the game '''
         self.playing = True
         while self.playing:
-            self.dt = self.clock.tick(FPS) / 1000 #We make this to move at constant speed not base on the framerate
-            self.events() #If the player click on quit or want to leave the game
-            self.update() #Catching all the changes that happen during one loop 
+            self.dt = self.clock.tick(st.FPS) / 1000
+            # move at constant speed not base on the framerate
+            self.events()
+            self.update()  # Catching all the changes that happen during a loop
             self.draw()
 
     def quit(self):
-        ''' Quit the game ''' 
+        ''' Quit the game '''
         pg.quit()
         sys.exit()
 
     def update(self):
         ''' Catching all the actions '''
         self.all_sprites.update()
-        hits = pg.sprite.spritecollide(self.player, self.items, True) #If the player walk on an item we delete it from the maze and add it in the collected item
-        for hit in hits : 
+        hits = pg.sprite.spritecollide(self.player, self.items, True)
+        # If the player walk on an item we delete it
+        # from the maze and add it in the collected item
+        for hit in hits:
             self.player.inventory.append(hit.type)
-        if pg.sprite.collide_rect(self.player, self.boss) : #If we collide with the boss we check if we have all the three items, and so we kill the boss else we loose
-            if len(self.player.inventory) == 3 :
+        if pg.sprite.collide_rect(self.player, self.boss):
+            # If we collide with the boss :
+            # we check if we have all the three items
+            # if so we kill the boss else we loose
+            if len(self.player.inventory) == 3:
                 self.boss.kill()
-            else :
+            else:
                 self.end_game = True
                 self.end_game_win = False
                 self.playing = False
         if pg.sprite.collide_rect(self.player, self.end):
-            if len(self.player.inventory) == 3 :
+            if len(self.player.inventory) == 3:
                 self.end_game = True
                 self.end_game_win = True
                 self.playing = False
@@ -132,11 +150,13 @@ class Game:
 
     def draw(self):
         ''' Drawn item on the screen '''
-        #self.screen.fill(BGCOLOR)
-        #self.draw_grid()
         self.screen.blit(self.map_img, self.map_rect)
         self.all_sprites.draw(self.screen)
-        self.draw_text("Items picked : {}".format(len(self.player.inventory)), pg.font.get_default_font(), 20, GREEN, WIDTH/2, 20, align='center')
+        self.draw_text("Items picked : {}".format(
+                       len(self.player.inventory)),
+                       pg.font.get_default_font(),
+                       20, st.GREEN, st.WIDTH/2, 20,
+                       align='center')
         pg.display.flip()
 
     def events(self):
@@ -152,54 +172,41 @@ class Game:
         font = pg.font.Font(font_name, size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
-        if align == "nw":
-            text_rect.topleft = (x, y)
-        if align ==  "ne":
-            text_rect.topright = (x, y)
-        if align == "sw":
-            text_rect.bottomleft = (x, y)
-        if align == "se":
-            text_rect.bottomright = (x, y)
-        if align == "n":
-            text_rect.midtop = (x, y)
-        if align == "s":
-            text_rect.midbottom = (x, y)
-        if align == "e":
-            text_rect.midright = (x, y)
-        if align == "w":
-            text_rect.midleft = (x, y)
         if align == 'center':
             text_rect.center = (x, y)
         self.screen.blit(text_surface, text_rect)
-    
+
     def show_game_over_screen(self):
-        self.screen.fill(BLACK)
-        if self.end_game_win == True:
+        self.screen.fill(st.BLACK)
+        if self.end_game_win is True:
             self.draw_text("Congratulation ! You win", self.font,
-                            50, GREEN, WIDTH / 2, HEIGHT / 2, align='center')
+                           50, st.GREEN, st.WIDTH / 2,
+                           st.HEIGHT / 2, align='center')
         else:
             self.draw_text("GAME OVER ! You loose", self.font, 50,
-                            RED, WIDTH / 2, HEIGHT / 2, align='center')
-        self.draw_text("Press 'r' to restart or 'q' to quit", pg.font.get_default_font(), 15, WHITE, WIDTH / 2, HEIGHT * 3/4, align='center')
+                           st.RED, st.WIDTH / 2, st.HEIGHT / 2, align='center')
+        self.draw_text("Press 'r' to restart or 'q' to quit",
+                       pg.font.get_default_font(), 15,
+                       st.WHITE, st.WIDTH / 2, st.HEIGHT * 3/4, align='center')
         pg.display.flip()
         self.wait_for_key()
-    
+
     def wait_for_key(self):
         pg.event.wait()
         waiting = True
-        while waiting == True:
-            self.clock.tick(FPS)
+        while waiting is True:
+            self.clock.tick(st.FPS)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.quit()
                 if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_r :
+                    if event.key == pg.K_r:
                         waiting = False
                     elif event.key == pg.K_q:
                         self.quit()
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     g = Game()
     while True:
         g.new()
