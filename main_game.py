@@ -1,9 +1,10 @@
 import os
 import sys
-from const import WALL, MC_GYVER, START, END, FLOOR, WIDTH, ENTER, BACKSLASH, TUBE, NEEDLE, ETHER
+import const as cs
 from random import randint
 from items import Object
 from mc_gyver import McGyver
+
 
 class Motor(Object, McGyver):
     '''Class who will handle the execution of the game '''
@@ -15,39 +16,43 @@ class Motor(Object, McGyver):
 
         ''' We call the differents method of the class '''
 
-        self.maze = self.coords_generator(txt_map) #we create à dict object from txt map
-        self.needle_object = Object(NEEDLE)
-        self.tube_object = Object(TUBE)
-        self.ether_object = Object(ETHER)
+        self.maze = self.coords_generator(txt_map)
+        self.needle_object = Object(cs.NEEDLE)
+        self.tube_object = Object(cs.TUBE)
+        self.ether_object = Object(cs.ETHER)
         self.mc_gyver = McGyver()
-        self.wall = WALL
-        self.enter = ENTER
-        self.end = END
-        self.mc_gyver = MC_GYVER
-        self.backslash = BACKSLASH
-        self.floor = FLOOR
-        self.needle = NEEDLE
-        self.tube = TUBE
-        self.ether = ETHER
-        self.labyrinthe_characteristics(self.maze) #We determines elements of the maze
+        self.wall = cs.WALL
+        self.enter = cs.ENTER
+        self.end = cs.END
+        self.mc_gyver = cs.MC_GYVER
+        self.backslash = cs.BACKSLASH
+        self.floor = cs.FLOOR
+        self.needle = cs.NEEDLE
+        self.tube = cs.TUBE
+        self.ether = cs.ETHER
+        self.labyrinthe_characteristics(self.maze)
         self.turn = 0
         '''We launch game loop '''
         self.game_loop()
 
-
     def labyrinthe_characteristics(self, labyrinthe_map):
-        ''' We determine wall, enter, exit_door, player, current_map(txt file) and position'''
-        
+        '''
+        We determine wall, enter,
+        exit_door, player, current_map(txt file) and position
+        '''
         self.labyrinthe_map = labyrinthe_map
-        self.mc_gyver_pos = self.get_position(self.labyrinthe_map, self.mc_gyver)
+        self.mc_g_pos = self.get_position(self.labyrinthe_map,
+                                          self.mc_gyver)
         self.end_position = self.get_position(self.labyrinthe_map, self.end)
-        self.ether_position = self.get_position(self.labyrinthe_map, self.ether)
-        self.needle_position = self.get_position(self.labyrinthe_map, self.needle)
+        self.ether_position = self.get_position(self.labyrinthe_map,
+                                                self.ether)
+        self.needle_position = self.get_position(self.labyrinthe_map,
+                                                 self.needle)
         self.tube_position = self.get_position(self.labyrinthe_map, self.tube)
 
     def place_objects(self):
         ''' We place the items when we find a possible spot'''
-        for elem in self.needle, self.tube, self.ether :
+        for elem in self.needle, self.tube, self.ether:
             position_x = randint(0, 15)
             position_y = randint(0, 15)
             while self.maze[position_x, position_y] is not self.floor:
@@ -58,7 +63,7 @@ class Motor(Object, McGyver):
     def get_position(self, labyrinthe_map, elem):
         ''' We get the position of McGyvers (x,y) '''
         values = labyrinthe_map.items()
-        for keys, value in values :
+        for keys, value in values:
             if elem == value:
                 return keys
 
@@ -68,10 +73,10 @@ class Motor(Object, McGyver):
         y = 0
         coord_labyrinthe_map = {}
         for elem in txt_map:
-            if elem is not '\n':
+            if elem != '\n':
                 coord_labyrinthe_map[(x, y)] = elem
                 x += 1
-            else :
+            else:
                 coord_labyrinthe_map[(x, y)] = elem
                 x = 0
                 y += 1
@@ -79,11 +84,12 @@ class Motor(Object, McGyver):
 
     def is_crossable_or_picked(self, element):
         ''' Return true or false depending of the element '''
-        elem_crossables = [self.end, self.floor, self.needle, self.tube, self.ether]
-        if element in elem_crossables :
-            if element is self.ether :
+        elem_crossables = [self.end, self.floor,
+                           self.needle, self.tube, self.ether]
+        if element in elem_crossables:
+            if element is self.ether:
                 self.ether_object.ispicked = True
-                self.maze[self.get_position(self.maze,element)] = self.floor
+                self.maze[self.get_position(self.maze, element)] = self.floor
             elif element is self.tube:
                 self.tube_object.ispicked = True
                 self.maze[self.get_position(self.maze, element)] = self.floor
@@ -91,12 +97,12 @@ class Motor(Object, McGyver):
                 self.needle_object.ispicked = True
                 self.maze[self.get_position(self.maze, element)] = self.floor
             return True
-        else :
+        else:
             return False
 
     def display_maze(self, labyrinthe_map):
-        if self.mc_gyver_pos != (0, 1):
-            labyrinthe_map[0,1] = self.enter
+        if self.mc_g_pos != (0, 1):
+            labyrinthe_map[0, 1] = self.enter
         if self.needle_object.ispicked:
             labyrinthe_map[self.needle_position] = self.floor
         if self.ether_object.ispicked:
@@ -105,12 +111,12 @@ class Motor(Object, McGyver):
             labyrinthe_map[self.tube_position] = self.floor
         print(''.join(labyrinthe_map.values()))
 
-    def next_move(self, mc_gyver_pos, maze):
+    def next_move(self, mc_g_pos, maze):
         ''' We determine if the next move is possible or not '''
 
         ''' We get the x,y coordinate of McGyver '''
-        x_coords = mc_gyver_pos[0]
-        y_coords = mc_gyver_pos[1]
+        x_coords = mc_g_pos[0]
+        y_coords = mc_g_pos[1]
 
         ''' We calculate the next coords depending of the move'''
         MOVE_N = x_coords, y_coords - 1
@@ -125,8 +131,10 @@ class Motor(Object, McGyver):
         if (user_move == "n"):
             try:  # We check if the input is not out of the bound of the dict
                 if self.is_crossable_or_picked(maze[MOVE_N]):
-                    self.maze[MOVE_N], self.maze[self.mc_gyver_pos] = self.maze[self.mc_gyver_pos], self.maze[MOVE_N]
-                    self.mc_gyver_pos = MOVE_N  # We assign the new position
+                    self.maze[MOVE_N],
+                    self.maze[self.mc_g_pos] = self.maze[self.mc_g_pos],
+                    self.maze[MOVE_N]
+                    self.mc_g_pos = MOVE_N  # We assign the new position
                 else:
                     print("Sorry this move is impossible")
             except KeyError:
@@ -136,8 +144,10 @@ class Motor(Object, McGyver):
         elif (user_move == "s"):
             try:
                 if self.is_crossable_or_picked(self.maze[MOVE_S]):
-                    self.maze[MOVE_S], self.maze[self.mc_gyver_pos] = self.maze[self.mc_gyver_pos], self.maze[MOVE_S]
-                    self.mc_gyver_pos = MOVE_S
+                    self.maze[MOVE_S],
+                    self.maze[self.mc_g_pos] = self.maze[self.mc_g_pos],
+                    self.maze[MOVE_S]
+                    self.mc_g_pos = MOVE_S
                 else:
                     print("Sorry this move is impossible")
             except KeyError:
@@ -147,8 +157,10 @@ class Motor(Object, McGyver):
         elif (user_move == "e"):
             try:
                 if self.is_crossable_or_picked(self.maze[MOVE_E]):
-                    self.maze[MOVE_E], self.maze[self.mc_gyver_pos] = self.maze[self.mc_gyver_pos], self.maze[MOVE_E]
-                    self.mc_gyver_pos = MOVE_E
+                    self.maze[MOVE_E],
+                    self.maze[self.mc_g_pos] = self.maze[self.mc_g_pos],
+                    self.maze[MOVE_E]
+                    self.mc_g_pos = MOVE_E
                 else:
                     print("Sorry this move is impossible")
             except KeyError:
@@ -158,8 +170,10 @@ class Motor(Object, McGyver):
         elif (user_move == "o"):
             try:
                 if self.is_crossable_or_picked(self.maze[MOVE_O]):
-                    self.maze[MOVE_O], self.maze[self.mc_gyver_pos] = self.maze[self.mc_gyver_pos], self.maze[MOVE_O]
-                    self.mc_gyver_pos = MOVE_O
+                    self.maze[MOVE_O],
+                    self.maze[self.mc_g_pos] = self.maze[self.mc_g_pos],
+                    self.maze[MOVE_O]
+                    self.mc_g_pos = MOVE_O
                 else:
                     print("Sorry this move is impossible")
             except KeyError:
@@ -168,20 +182,22 @@ class Motor(Object, McGyver):
                     "Entrez votre next move currently (n/s/e/o) -q : ")
         else:
             print(
-                "Wrong you didn't enter a correct direction please enter (n/s/e/o) or (q) to quit")
+                "Wrong you didn't enter a correct direction")
 
     def game_loop(self):
         ''' The main loop of the game'''
-        self.place_objects() #We load and place the three elems
-        while(self.mc_gyver_pos != self.end_position): #While we don't have reach the end
+        self.place_objects()
+        while(self.mc_g_pos != self.end_position):
             self.display_maze(self.maze)
-            self.next_move(self.mc_gyver_pos, self.maze)
+            self.next_move(self.mc_g_pos, self.maze)
 
-        ''' We have reach the end we check if we have the three items required '''
-        if self.ether_object.ispicked and self.tube_object.ispicked and self.needle_object.ispicked :
+        if self.ether_object.ispicked \
+            and self.tube_object.ispicked and \
+                self.needle_object.ispicked:
             print("---- Congratulation you win the game ----")
-        else :
-            print("---- Sorry, You loose, you don't have all the required items")
+        else:
+            print("---- Sorry, You loose ---")
+
 
 if __name__ == "__main__":
     test = Motor()

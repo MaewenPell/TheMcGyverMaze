@@ -1,8 +1,5 @@
-'''Python files who's countains general class about the structure of the maze'''
-
 class Maze:
-    ''' Class Maze : we determine wall, enter, exit_door, player, current_map (txt file)'''
-    def __init__(self, wall, enter, exit_door, player, current_map): #Add the differents elem of the maze
+    def __init__(self, wall, enter, exit_door, player, current_map):
         self.wall = wall
         self.enter = enter
         self.exit_door = exit_door
@@ -19,5 +16,5 @@ class Maze:
             return True
         elif element == self.exit_door:
             return True
-        else :
+        else:
             return True
