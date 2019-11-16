@@ -1,7 +1,7 @@
 import pygame as pg
 import pytmx
-from settings import *
 
+import settings as st
 
 
 class Map:
@@ -9,13 +9,13 @@ class Map:
         self.data = []
         self.test_map_data = {}
         with open(filename, 'r') as f:
-                    for line in f:
-                        self.data.append(line)
-    
+            for line in f:
+                self.data.append(line)
         self.tilewidth = len(self.data[0])
         self.tileheight = len(self.data)
-        self.width = self.tilewidth * TILESIZE
-        self.height = self.tileheight * TILESIZE
+        self.width = self.tilewidth * st.TILESIZE
+        self.height = self.tileheight * st.TILESIZE
+
 
 class TiledMap:
     def __init__(self, filename):
@@ -28,10 +28,11 @@ class TiledMap:
         ti = self.tmxdata.get_tile_image_by_gid
         for layer in self.tmxdata.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
-                for x,y,gid in layer:
+                for x, y, gid in layer:
                     tile = ti(gid)
                     if tile:
-                        surface.blit(tile, (x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight))
+                        surface.blit(tile, (x * self.tmxdata.tilewidth,
+                                     y * self.tmxdata.tileheight))
 
     def make_map(self):
         temp_surface = pg.Surface((self.width, self.height))

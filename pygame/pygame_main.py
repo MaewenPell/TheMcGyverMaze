@@ -39,8 +39,6 @@ class Game:
                 path.join(sprt.image_folder,
                           st.ITEMS_IMAGES[item])).convert_alpha()
 
-        # self.map = Map(path.join(game_folder, 'map2.txt')) # Old map
-
     def new(self):
         ''' Scanning the tmx map and assign elems to Classes'''
         self.all_sprites = pg.sprite.Group()
@@ -95,14 +93,6 @@ class Game:
                   self.obj_poss_loc[index][1],
                   type)
 
-        #     OLD way to load map
-        # for row,tiles in enumerate(self.map.data):
-        #     for col, tile in enumerate(tiles):
-        #         if tile == 'O':
-        #             Wall(self,col, row)
-        #         if tile == '&':
-        #             self.player = Player(self, col, row)
-
     def run(self):
         ''' Main loop of the game '''
         self.playing = True
@@ -141,12 +131,6 @@ class Game:
                 self.end_game = True
                 self.end_game_win = True
                 self.playing = False
-
-    # def draw_grid(self):
-    #     for x in range(0, WIDTH, TILESIZE):
-    #         pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-    #     for y in range(0, HEIGHT, TILESIZE):
-    #         pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     def draw(self):
         ''' Drawn item on the screen '''
