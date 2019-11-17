@@ -38,7 +38,7 @@ To play the game :
 
 - Arrow keys or (Z/Q/S/D) to move the character through the maze
 - Get the three item before facing the boss otherwise you'll loose the game
-- Press 'r' to restart or 'q' to leave the game
+- When you finish : Press 'r' to restart or 'q' to leave the game
 
 Note : You can quit the game all the time by pressing 'esc'
 
@@ -63,7 +63,6 @@ Erase walls: ![Erase walls](https://i.postimg.cc/3rGJywSM/Erase.png√)
     1. - Drag the corner of walls adapt the new walls disposition
 
 Adapt layer : ![Adapt layer](https://i.postimg.cc/d3vJG23h/Fit-walls.png)
-## Build Walls
 
 Fitting done : ![Fitting done](https://i.postimg.cc/rs0FVVDJ/new-fitting.png)
 
@@ -73,8 +72,7 @@ Fitting done : ![Fitting done](https://i.postimg.cc/rs0FVVDJ/new-fitting.png)
 
 New map : ![New map](https://i.postimg.cc/02p3FznC/modified-map.png)
 
-
-### Adding walls :
+## Build Walls
 
 1. Step - Click on the wall layer (1)
 1. Step - Select the structure ressource (2)
@@ -84,7 +82,7 @@ New map : ![New map](https://i.postimg.cc/02p3FznC/modified-map.png)
 Adding walls : ![Addings walls](https://i.postimg.cc/tJhsFdjf/Addings-walls.png)
 
 
-5. Step - Re-it the obstacle layer : Click on the Obstacles layer (1)
+5. Step - Click on the obstacle layer : Click on the Obstacles layer (1)
 6. Step - Click on Insert rectangle (2)
 7. Step - Drag around your new walls(3)
 8. Step - Add them as wall - Save and and enjoy you modified map :)
