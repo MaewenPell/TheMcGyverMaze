@@ -63,7 +63,6 @@ Erase walls: ![Erase walls](https://i.postimg.cc/3rGJywSM/Erase.png√)
     1. - Drag the corner of walls adapt the new walls disposition
 
 Adapt layer : ![Adapt layer](https://i.postimg.cc/d3vJG23h/Fit-walls.png)
-## Build Walls
 
 Fitting done : ![Fitting done](https://i.postimg.cc/rs0FVVDJ/new-fitting.png)
 
@@ -73,8 +72,7 @@ Fitting done : ![Fitting done](https://i.postimg.cc/rs0FVVDJ/new-fitting.png)
 
 New map : ![New map](https://i.postimg.cc/02p3FznC/modified-map.png)
 
-
-### Adding walls :
+## Build Walls
 
 1. Step - Click on the wall layer (1)
 1. Step - Select the structure ressource (2)
