@@ -42,19 +42,55 @@ To play the game :
 
 Note : You can quit the game all the time by pressing 'esc'
 
-### Modification of the map 
+## Modification of the map 
 
-If you want modify the map you can do it easily by downloading the little soft Tiled map editor :
-(https://www.mapeditor.org/) 
+### If you want modify the map you can do it easily by downloading the little soft Tiled map editor : (https://www.mapeditor.org/)
 
-1st step - Open the current tmx file located in the maps folder
-2nd step - If you want to delete walls :
-            1 - Click on the wall layer
-            2 - Click on the eraser(E)
-            3 - Click on the walls you want to delete
-![alt text](https://ibb.co/LJkVXbD)
+### Erasing wall : 
 
-## Built With
+1. step - Open the current tmx file located in the maps folder (The_maze_game/maps/map_1.tmx)
+
+1. step - If you want to delete walls : 
+    1. - Click on the wall layer (1)
+    1. - Click on the eraser (2)
+    1. - Erase the walls you want 
+
+Erase walls: ![Erase walls](https://i.postimg.cc/3rGJywSM/Erase.png√)
+
+3. step - Adapt the obstacles layer to the walls:
+    1. - Click on the obstacles layer (1)
+    1. - Click on Select objects (2)
+    1. - Drag the corner of walls adapt the new walls disposition
+
+Adapt layer : ![Adapt layer](https://i.postimg.cc/d3vJG23h/Fit-walls.png)
+## Build Walls
+
+Fitting done : ![Fitting done](https://i.postimg.cc/rs0FVVDJ/new-fitting.png)
+
+4. step - Save to overite the current tmx file in (The_maze_game/maps/map_1.tmx)
+
+5. Relauch the game and enjoy you modified map ! :)
+
+New map : ![New map](https://i.postimg.cc/02p3FznC/modified-map.png)
+
+
+### Adding walls :
+
+1. Step - Click on the wall layer (1)
+1. Step - Select the structure ressource (2)
+1. Step - Select the tile you want to add (3)
+1. Step - Click on the map where you want to add the wall
+
+Adding walls : ![Addings walls](https://i.postimg.cc/tJhsFdjf/Addings-walls.png)
+
+
+5. Step - Re-it the obstacle layer : Click on the Obstacles layer (1)
+6. Step - Click on Insert rectangle (2)
+7. Step - Drag around your new walls(3)
+8. Step - Add them as wall - Save and and enjoy you modified map :)
+
+Fitting new walls : ![Fitting add walls](https://i.postimg.cc/jCYnwgnB/adding-walls.png)
+
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
