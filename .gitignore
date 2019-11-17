@@ -3,5 +3,4 @@ env/
 .vscode/
 .DS_Store
 .vscode/
-console_game/
 __pycache__/
