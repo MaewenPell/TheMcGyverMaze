@@ -82,7 +82,7 @@ New map : ![New map](https://i.postimg.cc/02p3FznC/modified-map.png)
 Adding walls : ![Addings walls](https://i.postimg.cc/tJhsFdjf/Addings-walls.png)
 
 
-5. Step - Re-it the obstacle layer : Click on the Obstacles layer (1)
+5. Step - Click on the obstacle layer : Click on the Obstacles layer (1)
 6. Step - Click on Insert rectangle (2)
 7. Step - Drag around your new walls(3)
 8. Step - Add them as wall - Save and and enjoy you modified map :)
