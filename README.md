@@ -2,6 +2,12 @@
 
 Short python game where we guide a character through a maze. To win the game we need to get three items placed in the maze.
 
+### Prerequisites
+
+If you don't have them you would need :
+- PIP to download the dependencies (https://pypi.org/project/pip/)
+- Virtualenv to generate a local env to run the game (https://virtualenv.pypa.io/en/stable/installation/)
+
 ## Getting Started and installation
 
 1st step - Download the repo :
@@ -22,15 +28,9 @@ pip install -r requirement.txt
 
 4th step - Launch the game :
 ```
-python3 pygame_main.py
+python3 The_maze_game/pygame_main.py
 ```
 
-
-### Prerequisites
-
-If you don't have them you would need :
-- PIP to download the dependencies (https://pypi.org/project/pip/)
-- Virtualenv to generate a local env to run the game (https://virtualenv.pypa.io/en/stable/installation/)
 
 ### Playing
 
