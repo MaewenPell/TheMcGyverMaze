@@ -27,5 +27,5 @@ END_IMG = 'end_img.png'
 
 ''' ITEMS PROPERTIES '''
 
-ITEMS_IMAGES = {'seringue': 'seringue.png',
+ITEMS_IMAGES = {'needle': 'seringue.png',
                 'tube': 'tube_plastique.png', 'ether': 'ether.png'}

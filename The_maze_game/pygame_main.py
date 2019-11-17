@@ -1,6 +1,6 @@
 import sys
 from os import path
-from random import randint
+from random import sample
 
 import pygame as pg
 
@@ -75,11 +75,9 @@ class Game:
                 self.obj_poss_loc.append(
                     (tile_object.x, tile_object.y))
 
-        self.place_objects('tube')
-        self.place_objects('ether')
-        self.place_objects('seringue')
+        self.place_objects(['tube', 'ether', 'needle'])
 
-    def place_objects(self, type):
+    def place_objects(self, items):
         '''
         Object managing :
         1- We generate a random index between 0 and the len of possible loc
@@ -87,11 +85,9 @@ class Game:
            and place it in the maze at the place defined randomly
         3- We delete this location so we can't have two items at the same place
         '''
-
-        index = randint(0, len(self.obj_poss_loc) - 1)
-        sprt.Item(self, self.obj_poss_loc[index][0],
-                  self.obj_poss_loc[index][1],
-                  type)
+        locations = sample(self.obj_poss_loc, len(items))
+        for location, item in zip(locations, items):
+            sprt.Item(self, *location, type=item)
 
     def run(self):
         ''' Main loop of the game '''
