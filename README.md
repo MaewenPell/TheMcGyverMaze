@@ -38,7 +38,7 @@ To play the game :
 
 - Arrow keys or (Z/Q/S/D) to move the character through the maze
 - Get the three item before facing the boss otherwise you'll loose the game
-- Press 'r' to restart or 'q' to leave the game
+- When you finish : Press 'r' to restart or 'q' to leave the game
 
 Note : You can quit the game all the time by pressing 'esc'
 
