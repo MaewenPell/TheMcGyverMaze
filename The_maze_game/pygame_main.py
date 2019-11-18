@@ -4,8 +4,12 @@ from random import sample
 
 import pygame as pg
 
+import boss
+import end
+import items as it
+import obstacles
+import player
 import settings as st
-import sprites as sprt
 import tilemap as tlm
 
 
@@ -23,20 +27,20 @@ class Game:
         ''' Definition of the images and the map '''
 
         self.game_folder = path.dirname(__file__)
-        self.image_folder = path.join(sprt.game_folder, 'ressource')
-        self.map_folder = path.join(sprt.game_folder, 'maps')
-        self.font = path.join(sprt.image_folder, 'game_over.ttf')
+        self.image_folder = path.join(player.game_folder, 'ressource')
+        self.map_folder = path.join(player.game_folder, 'maps')
+        self.font = path.join(player.image_folder, 'game_over.ttf')
         self.player_img = pg.image.load(
-            path.join(sprt.image_folder, st.PLAYER_IMG)).convert_alpha()
+            path.join(player.image_folder, st.PLAYER_IMG)).convert_alpha()
         self.end_img = pg.image.load(
-            path.join(sprt.image_folder, st.END_IMG)).convert_alpha()
+            path.join(player.image_folder, st.END_IMG)).convert_alpha()
         self.boss_img = pg.image.load(
-            path.join(sprt.image_folder, st.BOSS_IMG)).convert_alpha()
+            path.join(player.image_folder, st.BOSS_IMG)).convert_alpha()
         self.item_images = {}
         for item in st.ITEMS_IMAGES:
             # We load and assign images {'game_name' : 'images_name.png'}
             self.item_images[item] = pg.image.load(
-                path.join(sprt.image_folder,
+                path.join(player.image_folder,
                           st.ITEMS_IMAGES[item])).convert_alpha()
 
     def new(self):
@@ -58,19 +62,22 @@ class Game:
         '''
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'player':
-                self.player = sprt.Player(self, tile_object.x, tile_object.y)
+                self.player = player.Player(self, tile_object.x, tile_object.y)
             if tile_object.name == 'wall':
-                self.wall = sprt.Obstacle(self, tile_object.x,
-                                          tile_object.y, tile_object.width,
-                                          tile_object.height)
+                self.wall = obstacles.Obstacle(self, tile_object.x,
+                                               tile_object.y,
+                                               tile_object.width,
+                                               tile_object.height)
             if tile_object.name == 'boss':
-                self.boss = sprt.Boss(self, tile_object.x,
-                                      tile_object.y, tile_object.width,
+                self.boss = boss.Boss(self, tile_object.x,
+                                      tile_object.y,
+                                      tile_object.width,
                                       tile_object.height)
             if tile_object.name == 'end':
-                self.end = sprt.End(self, tile_object.x,
-                                    tile_object.y, tile_object.width,
-                                    tile_object.height)
+                self.end = end.End(self, tile_object.x,
+                                   tile_object.y,
+                                   tile_object.width,
+                                   tile_object.height)
             if tile_object.name == 'object':
                 self.obj_poss_loc.append(
                     (tile_object.x, tile_object.y))
@@ -87,7 +94,7 @@ class Game:
         '''
         locations = sample(self.obj_poss_loc, len(items))
         for location, item in zip(locations, items):
-            sprt.Item(self, *location, type=item)
+            it.Item(self, *location, type=item)
 
     def run(self):
         ''' Main loop of the game '''
