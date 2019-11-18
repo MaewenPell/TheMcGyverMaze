@@ -43,8 +43,7 @@ class Game:
                 path.join(player.image_folder,
                           st.ITEMS_IMAGES[item])).convert_alpha()
 
-    def new(self):
-        ''' Scanning the tmx map and assign elems to Classes'''
+    def assign_all(self):
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.items = pg.sprite.Group()
@@ -53,13 +52,13 @@ class Game:
         # We define a Surface of width * height to countain the map
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
-        self.obj_poss_loc = []
         self.end_game = False
         self.end_game_win = False
 
-        ''' Read all the tiles :
-            and assign them to the related class
-        '''
+    def new(self):
+        ''' Scanning the tmx map and assign elems to Classes'''
+        self.obj_poss_loc = []
+
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'player':
                 self.player = player.Player(self, tile_object.x, tile_object.y)
@@ -129,7 +128,7 @@ class Game:
                 self.end_game = True
                 self.end_game_win = False
                 self.playing = False
-        if pg.sprite.collide_rect(self.player, self.end):
+        elif pg.sprite.collide_rect(self.player, self.end):
             if len(self.player.inventory) == 3:
                 self.end_game = True
                 self.end_game_win = True
@@ -196,6 +195,7 @@ class Game:
 if __name__ == "__main__":
     g = Game()
     while True:
+        g.assign_all()
         g.new()
         g.run()
         g.show_game_over_screen()
