@@ -5,6 +5,7 @@ Short python game where we guide a character through a maze. To win the game we 
 ### Prerequisites
 
 If you don't have them you would need :
+- Python3 (https://www.python.org/)
 - PIP to download the dependencies (https://pypi.org/project/pip/)
 - Virtualenv to generate a local env to run the game (https://virtualenv.pypa.io/en/stable/installation/)
 
@@ -28,9 +29,9 @@ pip install -r requirement.txt
 
 4th step - Launch the game :
 ```
-python3 The_maze_game/pygame_main.py
+cd The_maze_game
+python3 -m pygame_main
 ```
-
 
 ### Playing
 
