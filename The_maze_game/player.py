@@ -75,9 +75,9 @@ class Player(pg.sprite.Sprite):
             elif self.y < 0:
                 self.vy = 0
                 self.rect.y = 0
-            elif self.y >= st.HEIGHT - self.rect.width:
+            elif self.y >= (st.HEIGHT - st.TILESIZE) - self.rect.width:
                 self.vy = 0
-                self.y = st.HEIGHT - self.rect.width
+                self.y = (st.HEIGHT - st.TILESIZE) - self.rect.width
                 self.rect.y = self.y
 
     def update(self):

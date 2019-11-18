@@ -9,7 +9,7 @@ RED = (255, 0, 0)
 
 MAP = 'map_1.tmx'
 WIDTH = 300  # 20 px tiles * 15 tiles
-HEIGHT = 300
+HEIGHT = 320
 FPS = 60
 TITLE = "The McGyver Maze"
 

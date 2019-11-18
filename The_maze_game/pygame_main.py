@@ -141,7 +141,7 @@ class Game:
         self.draw_text("Items picked : {}".format(
                        len(self.player.inventory)),
                        pg.font.get_default_font(),
-                       20, st.GREEN, st.WIDTH/2, 20,
+                       20, st.GREEN, st.WIDTH/2, st.HEIGHT-10,
                        align='center')
         pg.display.flip()
 
