@@ -30,7 +30,7 @@ pip install -r requirement.txt
 4th step - Launch the game :
 ```
 cd The_maze_game
-python3 -m pygame_main
+python -m pygame_main
 ```
 
 ### Playing
