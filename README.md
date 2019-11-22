@@ -67,9 +67,13 @@ Adapt layer : ![Adapt layer](https://i.postimg.cc/d3vJG23h/Fit-walls.png)
 
 Fitting done : ![Fitting done](https://i.postimg.cc/rs0FVVDJ/new-fitting.png)
 
-4. step - Save to overite the current tmx file in (The_maze_game/maps/map_1.tmx)
+4. step - Save to overite the current tmx file in (The_maze_game/maps/map_1.tmx) or save your new map in this folder as a different name
 
-5. Relauch the game and enjoy you modified map ! :)
+5. Extra step if you have save your map with a different name : 
+    1. - Open settings.py
+    1. - Change the MAP variable with the name of your map
+
+6. Relauch the game and enjoy you modified map ! :)
 
 New map : ![New map](https://i.postimg.cc/02p3FznC/modified-map.png)
 

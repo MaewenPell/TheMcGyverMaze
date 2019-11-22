@@ -89,7 +89,6 @@ class Game:
         1- We generate a random index between 0 and the len of possible loc
         2- For each item we create an instance of Item
            and place it in the maze at the place defined randomly
-        3- We delete this location so we can't have two items at the same place
         '''
         locations = sample(self.obj_poss_loc, len(items))
         for location, item in zip(locations, items):
