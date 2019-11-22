@@ -18,13 +18,13 @@ git clone https://github.com/MaewenPell/TheMcGyverMaze
 
 2nd step - Create a virutal env and activate it
 ```
-virtualenv -r python3 env
+python3 -m venv env
 source env/bin/activate
 ```
 
 3rd step - Download the dependencies :
 ```
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 4th step - Launch the game :
