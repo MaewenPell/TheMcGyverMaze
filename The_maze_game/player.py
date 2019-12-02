@@ -21,6 +21,15 @@ class Player(pg.sprite.Sprite):
         self.y = y
         self.inventory = []
 
+    def update(self):
+        self.get_keys()
+        self.x += self.vx * self.game.dt
+        self.y += self.vy * self.game.dt
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        self.rect.y = self.y
+        self.collide_with_walls('y')
+
     def get_keys(self):
         ''' Handle the keys moves '''
         self.vx, self.vy = 0, 0
@@ -79,12 +88,3 @@ class Player(pg.sprite.Sprite):
                 self.vy = 0
                 self.y = (st.HEIGHT - st.TILESIZE) - self.rect.width
                 self.rect.y = self.y
-
-    def update(self):
-        self.get_keys()
-        self.x += self.vx * self.game.dt
-        self.y += self.vy * self.game.dt
-        self.rect.x = self.x
-        self.collide_with_walls('x')
-        self.rect.y = self.y
-        self.collide_with_walls('y')
